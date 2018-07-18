@@ -1,0 +1,9 @@
+.maskLayer{position:fixed;z-index:9900; top:0; left:0; width:100%; height:100%; background:#000; filter:alpha(opacity=50); -moz-opacity:0.5; -khtml-opacity: 0.5; opacity: 0.5; display:none;}
+.mydialog{position:fixed;z-index:9999;top:20%;left:0;right:0;width:80%;max-width:700px;margin:5% auto auto auto;background:white;font-family:Microsoft Yahei;border:solid 1px #dedb50;border-radius:5px;overflow:hidden;display:none;}
+.mydialog .close{width:100%;height:25px;padding-top:5px;text-align:right;}
+.mydialog .close a{width:20px;height:20px;margin-right:5px;text-decoration:none;}
+.mydialog .content{padding:5px 15px 25px 15px;line-height:30px;font-size:18px;font-weight:500;color:#e1b83c;text-indent:2.25em;overflow: hidden}
+.mydialog .btn{width:100%;height:50px;text-align:center;}
+.mydialog .btn a{width:50px;height:35px;padding:15px 35px;text-decoration:none;font-size:16px;color:white;border-radius:5px;}
+.mydialog .btn .confirm{background:#5d990a;}
+.mydialog .btn .cancel{background:#989b9d;margin-left:15px;}

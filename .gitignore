@@ -1,0 +1,6 @@
+.idea
+composer.lock
+*.log
+thinkphp
+runtime
+/runtime

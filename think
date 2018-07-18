@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+// +----------------------------------------------------------------------
+// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2006-2016 http://thinkphp.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: yunwuxin <448901948@qq.com>
+// +----------------------------------------------------------------------
+
+// 定义项目路径
+define('APP_PATH', __DIR__ . '/application/');
+
+//定义配置目录
+define('CONF_PATH', APP_PATH.'config/');
+define('EXTEND_PATH', __DIR__ .'/extend/');
+
+//定义环境 0：开发 1：测试 2：正式
+defined('ENVID') or define('ENVID', 0);
+
+// 加载框架引导文件
+require './thinkphp/console.php';

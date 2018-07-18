@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PHP研究院</title>
+    <style>
+        /**重置标签默认样式*/
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-family: '微软雅黑'
+        }
+        #container {
+            width: 450px;
+            height: 780px;
+            background: #eee;
+            margin: 80px auto 0;
+            position: relative;
+            box-shadow: 20px 20px 55px #777;
+        }
+        .header {
+            background: #000;
+            height: 40px;
+            color: #fff;
+            line-height: 34px;
+            font-size: 20px;
+            padding: 0 10px;
+        }
+        .hFoot {
+            background: #000;
+            height: 40px;
+            width: 100%;
+            color: #fff;
+            line-height: 34px;
+            font-size: 20px;
+            padding: 0 10px;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .footer {
+            width: 430px;
+            height: 50px;
+            background: #666;
+            position: absolute;
+            bottom: 0;
+            padding: 10px;
+        }
+        .footer input {
+            width: 275px;
+            height: 45px;
+            outline: none;
+            font-size: 20px;
+            text-indent: 10px;
+            position: absolute;
+            border-radius: 6px;
+            right: 80px;
+        }
+        .footer span {
+            display: inline-block;
+            width: 62px;
+            height: 48px;
+            background: #ccc;
+            font-weight: 900;
+            line-height: 45px;
+            cursor: pointer;
+            text-align: center;
+            position: absolute;
+            right: 10px;
+            border-radius: 6px;
+        }
+        .footer span:hover {
+            color: #fff;
+            background: #999;
+        }
+        #user_face_icon {
+            display: inline-block;
+            background: red;
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            position: absolute;
+            bottom: 6px;
+            left: 14px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        img {
+            width: 60px;
+            height: 60px;
+        }
+        .content {
+            font-size: 20px;
+            width: 435px;
+            height: 662px;
+            overflow: auto;
+            padding: 5px;
+        }
+        .content li {
+            margin-top: 10px;
+            padding-left: 10px;
+            width: 412px;
+            display: block;
+            clear: both;
+            overflow: hidden;
+        }
+        .content li img {
+            float: left;
+        }
+        .content li span{
+            background: #7cfc00;
+            padding: 10px;
+            border-radius: 10px;
+            float: left;
+            margin: 6px 10px 0 10px;
+            max-width: 310px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 3px #ccc;
+        }
+        .content li img.imgleft {
+            float: left;
+        }
+        .content li img.imgright {
+            float: right;
+        }
+        .content li span.spanleft {
+            float: left;
+            background: #fff;
+        }
+        .content li span.spanright {
+            float: right;
+            background: #7cfc00;
+        }
+        .pm {
+            position: fixed;
+            bottom: 5%;
+            right: 0;
+        }
+        .shake {
+            position: fixed;
+            bottom: 5%;
+            left: 0;
+        }
+    </style>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="header" style="opacity:0.8;">
+        <span style="float: left;margin-left: 6%">
+            基于PHP7+Swoole+Redis+Mysql实现的实时聊天系统
+        </span>
+    <span style="float: right;">
+        助飞PHP、让PHPer不再建站搬砖
+    </span>
+</div>
+<a href="https://github.com/lyxlk/CharRoom" target="_blank">
+    <img style="position: absolute; top: 0; left: 0; border: 0;width: 150px;height: 150px;" src="http://chatroom.ivisionsky.com/img/forkme.png" alt="Fork me on GitHub">
+</a>
+
+<div id="container">
+    <div class="header">
+        <span style="float: left;">
+            Q群【 <b style="color: #ff0000">200979897</b> 】
+        </span>
+        <span style="float: right;" class="time"></span>
+    </div>
+    <ul class="content">
+    </ul>
+    <div class="footer">
+        <div id="user_face_icon">
+            <img src="http://codeigniter.org.cn/forums/uc_server/images/noavatar_middle.gif" alt="">
+        </div>
+        <input id="TalkMSG" placeholder="说点什么吧...">
+        <span id="sendMsg">发送</span>
+    </div>
+    <input id="fd" value="0" style="display: none;">
+
+    <div class="pm">
+        <img style="width: 200px;height: 200px" src="/img/qun.png">
+    </div>
+
+    <div class="shake">
+        <a href="/index/index/shake">
+            <img style="width: 200px;height: 200px" src="/img/shake.png">
+        </a>
+    </div>
+</div>
+</body>
+</html>
+
+<script language="javascript" type="text/javascript">
+
+    $(document).ready(function () {
+
+        var ws = {};
+
+        var init_time = function() {
+            setInterval(function () {
+                var oDate  = new Date();
+                var h   = oDate.getHours(); //获取系统时，
+                var min = oDate.getMinutes(); //分
+                var sec = oDate.getSeconds(); //秒
+                if (min <10) {
+                    min = '0' + min;
+                }
+                if (sec <10) {
+                    sec = '0' + sec;
+                }
+                $('.time').html(h+":"+min+':'+sec);
+            },1000)
+        };
+
+        //滚动到底部
+        var scrollToEnd = function (){
+            $(".content").scrollTop($(".content")[0].scrollHeight);
+        };
+
+        var link =  function  () {
+            ws = new WebSocket("ws://chatroom.ivisionsky.com:9654");//连接服务器
+            ws.onopen = function(event){
+                alert('骚年你来啦~~~加群一起浪吧');
+            };
+            ws.onmessage = function (event) {
+                var self_fd = parseInt($('#fd').val());
+                var data    = eval('('+event.data+')');
+                if((data.status == 100) && (self_fd==0)) {
+                    $('#fd').val(data.data.fd);
+                    $('#user_face_icon img').attr("src",data.data.icon);
+                } else {
+                    if(data.status==1) {
+                        var len = $('.content li').length
+                        if(len > 500) {
+                            $('.content').empty();
+                        }
+
+                        var da_fd = parseInt(data.data.fd);
+                        var img_class  =  da_fd == self_fd ? "imgright" : "imgleft";
+                        var span_class =  da_fd == self_fd ? "spanright" : "spanleft";
+                        var msg = data.data.msg;
+                        var li_html = '<li><img src="'+data.data.icon+'" class="'+img_class+'"><span class="'+span_class+'">'+msg+'</span></li>';
+                        $('.content').append(li_html);
+                        scrollToEnd();
+                    }
+                }
+            };
+
+            ws.onclose = function(event){
+                alert("已经与服务器断开连接\r\n当前连接状态："+this.readyState);
+            };
+
+            ws.onerror = function(event){
+                alert("WebSocket异常！");
+            };
+        };
+
+        $('#sendMsg').click(function(){
+            var msg = $('#TalkMSG').val();
+            if(msg ==''){
+                alert('不能发送空消息');
+            }else {
+                $('#TalkMSG').val('');
+                ws.send(msg);
+            }
+        });
+
+        $(document).keyup(function(event){
+            if(event.keyCode ==13){
+                $('#sendMsg').trigger("click");
+            }
+        });
+
+        ;(function () {
+            init_time();
+            link();
+        })()
+
+    });
+
+</script>

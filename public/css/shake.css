@@ -1,0 +1,36 @@
+html,body,table{margin:0;width:100%;height:100%;background-color:#444444;}
+a{text-decoration:none;}
+table{text-align:center;}
+.container{height:80%;}
+.shake_up{width:150px;height:150px;margin:auto;position:absolute;clip:rect(0,150px,75px,0);top:25%;left:0;right:0;}
+.shake_down{width:150px;height:150px;margin:auto;position:absolute;clip:rect(75px,150px,150px,0);top:25%;left:0;right:0;}
+.loading{position: absolute; top: 60%; left: 50%; margin-left: -50px; width: 100px; height: 100px; background: url(../images/spinner.png) no-repeat; background-size: 100px 100px; opacity: 0;
+    -webkit-animation: loading infinite linear .5s;
+       -moz-animation: loading infinite linear .5s;
+        -ms-animation: loading infinite linear .5s;
+         -o-animation: loading infinite linear .5s;
+            animation: loading infinite linear .5s;
+    -webkit-transition: all .5s;
+       -moz-transition: all .5s;
+        -ms-transition: all .5s;
+         -o-transition: all .5s;
+            transition: all .5s; }
+
+@-webkit-keyframes loading {
+    0% {
+        -webkit-transform: rotate(0);
+           -moz-transform: rotate(0);
+            -ms-transform: rotate(0);
+             -o-transform: rotate(0);
+                transform: rotate(0); }
+    100% {
+        -webkit-transform: rotate(360deg);
+           -moz-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+             -o-transform: rotate(360deg);
+                transform: rotate(360deg); }
+}
+.loading-show { opacity: 1; }
+
+.inner{width:80px;height:150px;margin:auto;position:absolute;top:25%;left:0;right:0;}
+.controlbar{height:75px;width:40px;font:15px '微软雅黑';color:#E3E3E3;}

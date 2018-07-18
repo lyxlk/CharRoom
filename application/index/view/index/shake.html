@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <title>PHP研究院|摇一摇</title>
+    <link rel="stylesheet" href="/css/shake.css">
+    <link rel="stylesheet" href="/css/myDialog.css">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/howler.min.js"></script>
+    <script type="text/javascript" src="/js/fastclick.js"></script>
+    <script type="text/javascript" src="/js/shake.js"></script>
+    <script type="text/javascript" src="/js/myDialog.js"></script>
+    <style>
+        /**重置标签默认样式*/
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-family: '微软雅黑'
+        }
+        #container {
+            width: 450px;
+            height: 780px;
+            margin: 80px auto 0;
+            position: relative;
+        }
+        .header2 {
+            background: #000;
+            height: 40px;
+            color: #fff;
+            line-height: 34px;
+            font-size: 20px;
+            padding: 0 10px;
+        }
+
+        .pm {
+            position: fixed;
+            bottom: 5%;
+            right: 0;
+        }
+        .shake {
+            position: fixed;
+            bottom: 5%;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="header2" style="opacity:0.8;">
+        <span style="float: left;">
+            基于PHP7+Swoole+Redis+Mysql实现的实时聊天系统
+        </span>
+    <span style="float: right;">
+        助飞PHP、让PHPer不再建站搬砖
+    </span>
+</div>
+<table id="container">
+    <tbody>
+    <tr>
+        <td class="container" colspan="2">
+            <div id="shake" onclick="javascript:shake();">
+                <img src="/images/inner.png" class="inner">
+                <img src="/images/shake.png" class="shake_up" id="shakeup">
+                <img src="/images/shake.png" class="shake_down" id="shakedown">
+            </div>
+            <div id="loading" class="loading"></div>
+        </td>
+    </tr>
+    <tr id="controlbar">
+        <td class="controlbar" onclick="javascript:shake();">
+            <img src="/images/sdy.png" width="60" height="53"><br />
+            <span style="font-size: 24px">看看大伙聊过啥</span>
+        </td>
+    </tr>
+    <tr id="cantshake" style="display:none"><td class="controlbar" colspan="2">对不起，您的手机无法支持摇一摇！</td></tr>
+    </tbody>
+</table>
+<div class="pm">
+    <img style="width: 200px;height: 200px" src="/img/qun.png">
+</div>
+
+<div class="shake">
+    <a href="/">
+        <img style="width: 200px;height: 200px" src="/img/back.png">
+    </a>
+</div>
+</body>
+</html>
+
+
+
+
