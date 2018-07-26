@@ -18,4 +18,14 @@ class Model_Keys extends Model {
     public static function pokerReceive($fd) {
         return __FUNCTION__."|{$fd}";
     }
+
+    //sessidAndFd
+    public static function uinfo($sessid) {
+        return __FUNCTION__."|{$sessid}";
+    }
+
+    public static function sessidAndFd() {
+        return __FUNCTION__;
+    }
+
 }

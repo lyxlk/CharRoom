@@ -53,4 +53,20 @@ class asyncTask extends Model {
         return false;
     }
 
+    /**
+     * @param int $fd
+     * @param string $img
+     * @param string $nick
+     * @param string $ip
+     * @return bool|void
+     * 修改昵称头像
+     */
+    public static function LogUserInfoToDb($fd=0,$img='',$nick='',$ip='') {
+        $PlayerLogObj = self::getDbObj();
+        if($PlayerLogObj) {
+            return $PlayerLogObj->LogUserInfoToDb($fd,$img,$nick,$ip);
+        }
+
+        return false;
+    }
 }

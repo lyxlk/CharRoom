@@ -147,7 +147,7 @@
 </head>
 <body>
 <div class="header" style="opacity:0.8;">
-        <span style="float: left;margin-left: 6%">
+        <span>
             基于PHP7+Swoole+Redis+Mysql实现的实时聊天系统
         </span>
     <span style="float: right;">
@@ -155,7 +155,7 @@
     </span>
 </div>
 <a href="https://github.com/lyxlk/CharRoom" target="_blank">
-    <img style="position: absolute; top: 0; left: 0; border: 0;width: 150px;height: 150px;" src="http://chatroom.ivisionsky.com/img/forkme.png" alt="Fork me on GitHub">
+    <img style="position: absolute; top: 40px; left: 0; border: 0;width: 150px;height: 150px;" src="http://chatroom.ivisionsky.com/img/forkme.png" alt="Fork me on GitHub">
 </a>
 
 <div id="container">
@@ -269,6 +269,19 @@
                 $('#sendMsg').trigger("click");
             }
         });
+
+        function getMoble() {
+            var prefixArray = new Array("130", "131", "132", "133", "135", "137", "138", "170", "187", "189");
+            var i = parseInt(10 * Math.random());
+            var prefix = prefixArray[i];
+            for (var j = 0; j < 8; j++) {
+                prefix = prefix + Math.floor(Math.random() * 10);
+            }
+
+            return prefix;
+        }
+
+
 
         ;(function () {
             init_time();

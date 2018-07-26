@@ -1,0 +1,469 @@
+
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta name="full-screen" content="yes">
+    <meta content="default" name="apple-mobile-web-app-status-bar-style">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="browsermode" content="application">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+    <base target="_blank">
+    <title>PHP研究院</title>
+    <link id="favicon" href="http://chatroom.ivisionsky.com/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="http://chatroom.ivisionsky.com/css/v2.css" />
+    <link rel="stylesheet" href="http://chatroom.ivisionsky.com/css/layui.css" />
+    <style>
+        body {
+            background-image:url(http://www.pptbz.com/d/file/p/201708/d772b112118b5a8f5e94eeae2cda39ba.jpg);
+            background-repeat:no-repeat;
+            background-attachment:fixed
+        }
+    </style>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+</head>
+<body>
+<img class="abs cover body-bg" width="100%" height="100%">
+<div class="abs cover contaniner">
+    <div class="abs cover pnl">
+        <div class="abs top pnl-head" id="pnlHead">
+            <div  class="pnl-hl" ><h4 style="color: #FFFFFF">PHP研究院</h4></div>
+            <div class="pnl-about" id="pnlAbout" style="width: 10em;">
+                Q群【 <b style="color: #ff0000">200979897</b> 】
+            </div>
+        </div>
+        <div class="abs top pnl-head-sm" id="pnlHeadSm">
+            <div class="chat-title">PHP研究院  Q群【 <b style="color: #ff0000">200979897</b> 】 </div>
+        </div>
+        <div class="abs cover pnl-body" id="pnlBody">
+            <input id="fd" value="0" style="display: none;">
+            <form action="" enctype="multipart/form-data" id="uploadform">
+                <input type="file" style="display:none" id='upload' name='img' multiple/>
+            </form>
+            <div class="abs cover pnl-left">
+                <div class="abs cover pnl-msgs scroll" id="show">
+                    <a href="https://github.com/lyxlk/CharRoom" target="_blank" >
+                        <img style="position: absolute; top: 0; left: 0; border: 0;width: 120px;height: 120px;z-index: 2000" src="http://chatroom.ivisionsky.com/img/forkme.png" alt="Fork me on GitHub">
+                    </a>
+                    <div class="pnl-list" id="msgs" style="height: 100px">
+
+                    </div>
+                </div>
+                <div class="abs bottom pnl-text">
+                    <div class="abs top pnl-warn" id="pnlWarn">
+                        <div class="fl btns rel pnl-warn-free">
+                            <i class="kh warn-btn menu-btn" title="图片上传" style="right: 10%">
+                                <img style="width: 18px;padding: 5px;cursor: pointer" src="http://chatroom.ivisionsky.com/img/img.png" class="upload" alt="图片上传" />
+                            </i>
+                            <i class="kh warn-btn menu-btn" title="发送" id="sendMsg2">
+                                <img style="width: 30px;padding: 2px;cursor: pointer" src="http://chatroom.ivisionsky.com/img/button_check.png" alt="发送" />
+                            </i>
+                        </div>
+                        <div class="fl btns rel pnl-warn-left" id="pnlBtns">
+                            <div class="pnl-warn-btns">
+                                <img style="width: 18px;padding: 5px;cursor: pointer" src="http://chatroom.ivisionsky.com/img/img.png" class="upload" alt="图片上传" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="abs cover pnl-input">
+                        <textarea class="scroll" id="TalkMSG" placeholder="在此输入..."></textarea>
+                    </div>
+                    <div class="abs br pnl-btn" id="sendMsg">发送</div>
+                    <div class="pnl-support" id="copyright" style="width: 20em;;">PHP研究院成员组提供技术支持</div>
+                </div>
+            </div>
+            <div class="abs right pnl-right">
+                <div class="slider-container" style="height: 16.25em;">
+                    <ul class="slider">
+                        <li style="height: 16.25em;">
+                            <img style="width: 100%;height: 100%" src="http://chatroom.ivisionsky.com/img/qun.png">
+                        </li>
+                    </ul>
+                </div>
+                <div class="pnl-right-content" style="top:16.35em;">
+                    <div class="pnl-tabs">
+                        <div class="tab-btn active" id="hot-tab">常见问题</div>
+                        <div class="tab-btn" id="rel-tab">在线骚年(<span class="online_users">0</span>)</div>
+                    </div>
+                    <div class="pnl-hot">
+                        <ul class="rel-list unselect" id="hots">
+                            <li class="rel-item">
+                                <a href="javascript:void(0);" onclick="return false;" class="admin_info">有无核心组成员QQ联系方式</a>
+                            </li>
+                            <li class="rel-item">
+                                <a href="javascript:void(0)"  onclick="return false;" class="chatRoom_info">聊天室如何实现的</a>
+                            </li>
+                            <li class="rel-item">
+                                <a href="javascript:void(0)"  onclick="return false;" class="gitHub_code">GitHub有源码吗</a>
+                            </li>
+                            <li class="rel-item">
+                                <a href="javascript:void(0)"  onclick="return false;" class="h5">有H5棋牌游戏地址吗？</a>
+                            </li>
+                            <li class="rel-item">
+                                <a href="http://chatroom.ivisionsky.com/index/index/shake" target="_blank" >看看大家聊过啥？</a>
+                            </li>
+                            <li class="rel-item">
+                                <a href="javascript:void(0)"  onclick="return false;" class="join">PHP基础不好可以加群吗？</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function _getHrefSearch() {
+        var search = window.location.search.substr(1).split('&'),
+            ret = {}, it;
+        for (var i = 0, len = search.length; i < len; i++) {
+            it = search[i];
+            ret[it.replace(/=[\w\W]*$/, '')] = it.replace(/^[\w\W]*?=/, '');
+        }
+        return ret;
+    }
+
+    function _getIeVersion() {
+        var v = 3,
+            p = document.createElement('p'),
+            all = p.getElementsByTagName('i');
+        while (p.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->', all[0]) {}
+        return v > 4 ? v : 0;
+    }
+
+    var _hrefParam = _getHrefSearch(), ie = _getIeVersion(), phone = _hrefParam.dev == 'phone';
+    window.parent && window.parent !== window && (!ie || ie > 8) && (document.body.className += ' ifr');
+    phone && (document.body.className += ' phone');
+
+    var scale = _hrefParam.scale;
+    scale && document.write('<meta name="viewport" content="width=device-width, initial-scale='+scale+', maximum-scale='+scale+', user-scalable=no">');
+</script>
+</body>
+</html>
+<script language="javascript" type="text/javascript">
+
+    $(document).ready(function () {
+        var ws = {};
+        var favicon_flag = 0;
+        var favicon_flag_intval = 0;
+        var favicon  = 'http://chatroom.ivisionsky.com/img/favicon.ico';
+        var favicon2 = 'http://chatroom.ivisionsky.com/img/favicon2.ico';
+
+        //验证用户是否在当前面板，没有在当前面板需要修改 favicon 提醒有消息
+        var hiddenProperty = 'hidden' in document ? 'hidden' :
+            'webkitHidden' in document ? 'webkitHidden' :
+                'mozHidden' in document ? 'mozHidden' :
+                    null;
+        var visibilityChangeEvent = hiddenProperty.replace(/hidden/i, 'visibilitychange');
+        var onVisibilityChange = function(){
+            if (!document[hiddenProperty]) {
+                clearInterval(favicon_flag_intval);
+                favicon_flag = 0;
+                $("#favicon").attr('href', favicon);
+            }else{
+                favicon_flag = 1;
+            }
+        };
+        document.addEventListener(visibilityChangeEvent, onVisibilityChange);
+
+        $(".upload").click(function(){
+            $("#upload").trigger('click');
+        });
+
+        $("#upload").change(function(){
+            //formdata对象，用来模拟表单
+            var formData = new FormData($('#uploadform')[0]);
+            $("#uploadform")[0].reset();
+            $.ajax({
+                url:"/index/index/upload",
+                type:"post",
+                data:formData,
+                processData: false, // 告诉jQuery不要去处理发送的数据
+                contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+                success:function(res){
+                    if(res.status == -1) {
+                        layer.alert(res.msg)
+                    } else {
+                        //发送图片
+                        var arr = {code:1000, msg:res.data.img,sessid: $.cookie('sessid'),md5:$.cookie('md5')};
+                        ws.send( JSON.stringify(arr));
+                    }
+                },
+                dataType:"json"
+            })
+        });
+
+        //滚动到底部
+        var scrollToEnd = function (){
+            $("#show").scrollTop($("#msgs")[0].scrollHeight);
+        };
+
+        var link =  function  () {
+            ws = new WebSocket("ws://chatroom.ivisionsky.com:9654");//连接服务器
+            ws.onopen = function(event){
+                var arr = {
+                    code:10,
+                    msg: '登陆' ,
+                    sessid: $.cookie('sessid'),
+                    md5:  $.cookie('md5'),
+                    nick: $.cookie('nick'),
+                    icon: $.cookie('icon')
+                };
+                ws.send( JSON.stringify(arr));
+                var html = '<div class="msg min time" id="histStart">' +
+                    '骚年你来啦~~~加群一起浪吧， <br />' +
+                    '头像昵称不满意？ <br />' +
+                    '没关系、点击头像更换吧~ <br />' +
+                    '</div>' +
+                    '<div class="msg" ></div>' +
+                    '<div class="msg" ></div>' +
+                    '<div class="msg" ></div>' +
+                    '<div class="msg" ></div>' +
+                    '<div class="msg" ></div>' +
+                    '<div class="msg" ></div>' +
+                    '<div class="msg" ></div>' +
+                    '<div class="msg" ></div>' +
+                    '<div class="msg" ></div>';
+
+                $('#msgs').append(html)
+            };
+
+            ws.onmessage = function (event) {
+
+                //验证需不需要有修改favicon进行消息提醒
+                if(favicon_flag) {
+                    clearInterval(favicon_flag_intval);
+                    var index = 1;
+                    favicon_flag_intval = setInterval(function () {
+                        var href = favicon;
+                        if((++index) % 2) {
+                            href = favicon2;
+                            index = index > 10000 ? 0 : index;
+                        }
+                        $("#favicon").attr('href',href);
+                    },300);
+                }
+                var self_fd = parseInt($('#fd').val());
+                var data    = eval('('+event.data+')');
+                var status  = parseInt(data.status);
+                if( status == 100) {
+                    $('#fd').val(data.data.fd);
+                    $('.online_users').text(data.data.online);
+                } else if(status == -2) {
+                    layer.msg('长时间未说话，正在重连服务器', {
+                        icon: 16
+                        ,shade: 0.01
+                    });
+
+                   setTimeout(function () {
+                       var arr = {
+                           code:10,
+                           msg: '登陆' ,
+                           sessid : $.cookie('sessid'),
+                           md5:  $.cookie('md5'),
+                           nick: $.cookie('nick'),
+                           icon: $.cookie('icon')
+                       };
+                       ws.send( JSON.stringify(arr));
+                   },1200)
+                } else if(status == 10) {
+                    $('#msgs').append('<div class="msg min time" id="histStart">'+data.data.msg+'</div>')
+                } else if(status == 20) {
+                    $('.online_users').text(data.data.online);
+                    if(typeof(data.data.msg) != "undefined" && (data.data.msg != "")) {
+                        $('#msgs').append('<div class="msg min time" id="histStart">'+data.data.msg+'</div>')
+                    }
+                } else {
+                    if(status==1) {
+                        var len = $('#msgs .msg').length
+                        if(len > 500) {
+                            $('.msgs').empty();
+                        }
+                        var da_fd      = parseInt(data.data.fd);
+                        var msg_class  =  da_fd == self_fd ? " msg-right " : " msg-left ";
+                        var open_info  =  da_fd == self_fd ? "self_info" : "other_info";
+                        var msg_div    = '<div class="msg" >';
+
+                        //图片
+                        if(typeof(data.data.code) != "undefined" && ( parseInt(data.data.code) == 1000)) {
+
+                            msg_div += '    <div class="'+msg_class+'" customer="'+data.data.nick+'">';
+                            msg_div += '        <div class="msg-host photo '+open_info+'" title="'+data.data.nick+'" img_src="'+data.data.icon+'" style="background-image: url('+data.data.icon+');cursor: pointer"></div>';
+
+                            msg_div += '<div class="msg-ball img" title="今天 '+data.data.time+'"><img class="'+msg_class+'" src="'+data.data.msg+'"  style="width:13.25em; height: 13.25em;" /></div>';
+
+                            msg_div += '    </div>';
+
+                        } else {
+                            var msg = data.data.msg ;
+
+                            msg_div += '    <div class="'+msg_class+'" worker="'+data.data.nick+'">';
+                            msg_div += '        <div class="msg-host photo '+open_info+'" title="'+data.data.nick+'" img_src="'+data.data.icon+'" style="background-image: url('+data.data.icon+');cursor: pointer"></div>';
+                            msg_div += '        <div class="msg-ball" title="今天 '+data.data.time+'">'+msg+'</div>';
+                            msg_div += '    </div>';
+                        }
+
+                        msg_div += '</div>';
+                        $('#msgs').append(msg_div);
+
+                        scrollToEnd();
+                    }
+                }
+            };
+
+            ws.onclose = function(event){
+                layer.alert("已经与服务器断开连接\r\n当前连接状态："+this.readyState,{
+                    'title' : "警告",
+                    btn: '重连' //按钮
+                },function () {
+                    layer.closeAll();
+                    window.location.href = '/';
+                });
+            };
+
+            ws.onerror = function(event){
+                layer.alert("WebSocket异常！");
+            };
+        };
+
+        $('#sendMsg2').click(function () {
+            $('#sendMsg').click();
+        });
+
+        $('#sendMsg').click(function(){
+            var msg = $('#TalkMSG').val();
+            if(msg ==''){
+                layer.alert('不能发送空消息');
+            } else {
+                $('#TalkMSG').val('');
+                var arr = {code:0, msg: msg ,sessid: $.cookie('sessid'),md5:$.cookie('md5')};
+                ws.send( JSON.stringify(arr));
+            }
+        });
+
+        $(document).keyup(function(event){
+            if(event.keyCode ==13){
+                $('#sendMsg').trigger("click");
+            }
+        });
+
+        //有无开发者详细信息
+        $('.admin_info').click(function(){
+            layer.load(1);
+            setTimeout(function () {
+                var arr = {code:12, msg: 'question' ,sessid: $.cookie('sessid'),md5:$.cookie('md5')};
+                ws.send( JSON.stringify(arr));
+                layer.closeAll('loading');
+            },1200);
+        });
+        //聊天室如何实现的
+        $('.chatRoom_info').click(function(){
+            layer.load(1);
+            setTimeout(function () {
+                var arr = {code:13, msg: 'question' ,sessid: $.cookie('sessid'),md5:$.cookie('md5')};
+                ws.send( JSON.stringify(arr));
+                layer.closeAll('loading');
+            },1200);
+        });
+
+        //GitHub有源码吗
+        $('.gitHub_code').click(function(){
+            layer.load(1);
+            setTimeout(function () {
+                var arr = {code:14, msg: 'question' ,sessid: $.cookie('sessid'),md5:$.cookie('md5')};
+                ws.send( JSON.stringify(arr));
+                layer.closeAll('loading');
+            },1200);
+        });
+
+        //有H5棋牌游戏地址吗？
+        $('.h5').click(function(){
+            layer.load(1);
+            setTimeout(function () {
+                var arr = {code:15, msg: 'question' ,sessid: $.cookie('sessid'),md5:$.cookie('md5')};
+                ws.send( JSON.stringify(arr));
+                layer.closeAll('loading');
+            },1200);
+        });
+
+        //PHP基础不好可以加群吗？
+        $('.join').click(function(){
+            layer.load(1);
+            setTimeout(function () {
+                var arr = {code:16, msg: 'question' ,sessid: $.cookie('sessid'),md5:$.cookie('md5')};
+                ws.send( JSON.stringify(arr));
+                layer.closeAll('loading');
+            },1200);
+        });
+
+        $(document).on('click','.self_info',function () {
+            var html = '<form id="userInfo"  action="javascript:void(0)" style="margin-top: 5%">';
+            html += '   <input  name="nick" placeholder="昵称最大15字"  class="layui-input"> <br />';
+            html += '   <input  multiple="multiple" accept="image/*" value="请选择头像" type="file" name="file" placeholder="请选择头像"  style="cursor: pointer">';
+            html += '</form>';
+            layer.alert(html,{
+                'title' : "修改昵称头像",
+                btn: '修改' //按钮
+            },function () {
+                layer.msg('数据修改中。。。', {
+                    icon: 16
+                    ,shade:0.5
+                });
+                var formData = new FormData($('#userInfo')[0]);
+                $.ajax({
+                    url:"/index/index/modify",
+                    type:"post",
+                    data:formData,
+                    processData: false, // 告诉jQuery不要去处理发送的数据
+                    contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+                    success:function(res){
+                        layer.closeAll();
+                        layer.msg(res.msg);
+                        $.cookie('nick', res.data.nick, { expires: 365, path: '/' });
+                        $.cookie('icon', res.data.icon, { expires: 365, path: '/' });
+                    },
+                    dataType:"json"
+                })
+            })
+        });
+
+        $(document).on('click','.other_info',function () {
+            var img_src = $(this).attr('img_src');
+            layer.photos({
+                photos: {
+                    "title": "", //相册标题
+                    "id": 1, //相册id
+                    "start": 0, //初始显示的图片序号，默认0
+                    "data": [   //相册包含的图片，数组格式
+                        {
+                            "alt": "头像",
+                            "pid": 666, //图片id
+                            "src": img_src, //原图地址
+                            "thumb":img_src //缩略图地址
+                        }
+                    ]
+                }
+                ,anim: 3 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            });
+        })
+
+        ;(function () {
+            link();
+        })()
+    })
+
+</script>
+

@@ -30,14 +30,16 @@ class PlayerLog extends Model{
         $data = json_decode($msg,true);
         $msg  = isset($data['msg']) ? $data['msg'] : "";
         $fd   = isset($data['fd']) ? $data['fd']   : 0;
+        $ip   = isset($data['ip']) ? $data['ip']   : 0;
 
         return self::execute(
-            'insert into t_msg (fd,msg, add_time,status) values (:fd, :msg, :add_time, :status)',
+            'insert into t_msg (fd,msg, add_time,status,ip) values (:fd, :msg, :add_time, :status,:ip)',
             [
                 'fd'=>$fd,
                 'msg'=>$msg,
                 'add_time'=>intval($time),
-                'status'=>intval($status)
+                'status'=>intval($status),
+                'ip'=>$ip,
             ]
         );
 
@@ -64,6 +66,33 @@ class PlayerLog extends Model{
             return [!empty($aData),$aData];
         }catch (\Exception $e) {
             return [false,$e->getMessage()];
+        }
+
+    }
+
+    /**
+     * @param int $fd
+     * @param string $img
+     * @param string $nick
+     * @param string $ip
+     * @return int
+     * 昵称头像记录
+     */
+    public function LogUserInfoToDb($fd=0,$img='',$nick='',$ip='') {
+        try {
+            $time = time();
+            return self::execute(
+                'insert into t_modify_uinfo (fd,img,nick,ip,add_time) values (:fd, :img, :nick, :ip,:add_time)',
+                [
+                    'fd'=>$fd,
+                    'img'=>$img,
+                    'nick'=>$nick,
+                    'ip'=>$ip,
+                    'add_time'=>$time,
+                ]
+            );
+        } catch (\Exception $e) {
+            print_r($e->getMessage());exit;
         }
 
     }
