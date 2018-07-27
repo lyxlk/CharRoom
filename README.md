@@ -2,6 +2,8 @@
 
 推出的基于PHP7+Swoole+Redis+Mysql实现的实时聊天系统
 
+PHP框架是：ThinkPHP5.0
+
 项目演示地址 : http://chatroom.ivisionsky.com
 
 欢迎各位同仁一起推进、做出一个有意义的项目
