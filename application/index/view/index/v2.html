@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="zh">
 <head>
@@ -56,7 +55,7 @@
             <div class="abs cover pnl-left">
                 <div class="abs cover pnl-msgs scroll" id="show">
                     <a href="https://github.com/lyxlk/CharRoom" target="_blank" >
-                        <img style="position: absolute; top: 0; left: 0; border: 0;width: 120px;height: 120px;z-index: 2000" src="http://chatroom.ivisionsky.com/img/forkme.png" alt="Fork me on GitHub">
+                        <img style="position: absolute; top: 0; left: 0; border: 0;width: 120px;height: 120px;z-index: 2000" src="http://chatroom.ivisionsky.com/img/forkme.png" title="开源项目不易，请保留作者权益信息，谢谢。" alt="Fork Me On GitHub">
                     </a>
                     <div class="pnl-list" id="msgs" style="height: 100px">
 
@@ -65,11 +64,11 @@
                 <div class="abs bottom pnl-text">
                     <div class="abs top pnl-warn" id="pnlWarn">
                         <div class="fl btns rel pnl-warn-free">
-                            <i class="kh warn-btn menu-btn" title="图片上传" style="right: 10%">
-                                <img style="width: 18px;padding: 5px;cursor: pointer" src="http://chatroom.ivisionsky.com/img/img.png" class="upload" alt="图片上传" />
+                            <i class="kh warn-btn menu-btn" title="图片上传" style="right: 10%;top:0">
+                                <img style="width: 18px;cursor: pointer" src="http://chatroom.ivisionsky.com/img/img.png" class="upload" alt="图片上传" />
                             </i>
-                            <i class="kh warn-btn menu-btn" title="发送" id="sendMsg2">
-                                <img style="width: 30px;padding: 2px;cursor: pointer" src="http://chatroom.ivisionsky.com/img/button_check.png" alt="发送" />
+                            <i class="kh warn-btn menu-btn" title="发送" id="sendMsg2" style="top:2px">
+                                <img style="width: 30px;cursor: pointer" src="http://chatroom.ivisionsky.com/img/button_check.png" alt="发送" />
                             </i>
                         </div>
                         <div class="fl btns rel pnl-warn-left" id="pnlBtns">
@@ -82,7 +81,7 @@
                         <textarea class="scroll" id="TalkMSG" placeholder="在此输入..."></textarea>
                     </div>
                     <div class="abs br pnl-btn" id="sendMsg">发送</div>
-                    <div class="pnl-support" id="copyright" style="width: 20em;;">PHP研究院成员组提供技术支持</div>
+                    <div class="pnl-support" id="copyright" style="width: 20em;">PHP研究院成员组提供技术支持</div>
                 </div>
             </div>
             <div class="abs right pnl-right">
@@ -303,7 +302,7 @@
                             msg_div += '    <div class="'+msg_class+'" customer="'+data.data.nick+'">';
                             msg_div += '        <div class="msg-host photo '+open_info+'" title="'+data.data.nick+'" img_src="'+data.data.icon+'" style="background-image: url('+data.data.icon+');cursor: pointer"></div>';
 
-                            msg_div += '<div class="msg-ball img" title="今天 '+data.data.time+'"><img class="'+msg_class+'" src="'+data.data.msg+'"  style="width:13.25em; height: 13.25em;" /></div>';
+                            msg_div += '<div class="msg-ball img" title="今天 '+data.data.time+'" style="cursor: pointer"><img class="'+msg_class+'" src="'+data.data.msg+'"  style="width:15.25em; height: 17.25em;" /></div>';
 
                             msg_div += '    </div>';
 
@@ -444,7 +443,7 @@
             var img_src = $(this).attr('img_src');
             layer.photos({
                 photos: {
-                    "title": "", //相册标题
+                    "title": "用户头像", //相册标题
                     "id": 1, //相册id
                     "start": 0, //初始显示的图片序号，默认0
                     "data": [   //相册包含的图片，数组格式
@@ -457,6 +456,26 @@
                     ]
                 }
                 ,anim: 3 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            });
+        });
+
+        //图片
+        $(document).on('click','.img img',function () {
+            var img_src = $(this).attr('src');
+            layer.photos({
+                photos: {
+                    "title": "聊天图片", //相册标题
+                    "id": 1, //相册id
+                    "start": 0, //初始显示的图片序号，默认0
+                    "data": [   //相册包含的图片，数组格式
+                        {
+                            "alt": "图片",
+                            "pid": 666, //图片id
+                            "src": img_src, //原图地址
+                            "thumb":img_src //缩略图地址
+                        }
+                    ]
+                }
             });
         })
 
