@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="http://chatroom.ivisionsky.com/css/layui.css" />
     <style>
         body {
-            background-image:url(http://www.pptbz.com/d/file/p/201708/d772b112118b5a8f5e94eeae2cda39ba.jpg);
+            background-image:url(https://s1.ax1x.com/2018/08/31/PvAAcq.jpg);
             background-repeat:no-repeat;
             background-attachment:fixed
         }
@@ -39,13 +39,17 @@
 <div class="abs cover contaniner">
     <div class="abs cover pnl">
         <div class="abs top pnl-head" id="pnlHead">
-            <div  class="pnl-hl" ><h4 style="color: #FFFFFF">PHP研究院</h4></div>
+            <div  class="pnl-hl" ><h4 style="color: #FFFFFF;margin: 5px">PHP研究院【 <b style="color: #ff0000">200979897</b> 】</h4></div>
             <div class="pnl-about" id="pnlAbout" style="width: 10em;">
-                Q群【 <b style="color: #ff0000">200979897</b> 】
+                <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=b5d30a7d6d90dae0fa6930c985dd7fa7fcf9cd6839521bb190c5b75b8a126c8d"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="PHP研究院" title="PHP研究院"></a>
             </div>
         </div>
         <div class="abs top pnl-head-sm" id="pnlHeadSm">
-            <div class="chat-title">PHP研究院  Q群【 <b style="color: #ff0000">200979897</b> 】 </div>
+            <div class="chat-title" style="font-size: 0.9em;;">
+                <a target="_blank" style="color: #FFFFFF" href="//shang.qq.com/wpa/qunwpa?idkey=b5d30a7d6d90dae0fa6930c985dd7fa7fcf9cd6839521bb190c5b75b8a126c8d">
+                    单击加群【<b style="color: #ff0000"> 200979897 </b>】，当前为手机模式
+                </a>
+            </div>
         </div>
         <div class="abs cover pnl-body" id="pnlBody">
             <input id="fd" value="0" style="display: none;">
@@ -227,18 +231,8 @@
                 };
                 ws.send( JSON.stringify(arr));
                 var html = '<div class="msg min time" id="histStart">' +
-                    '骚年你来啦~~~加群一起浪吧， <br />' +
-                    '头像昵称不满意？ <br />' +
-                    '没关系、点击头像更换吧~ <br />' +
+                    '<span >----- 已成功连接服务器 (点击头像更换信息) -----</span>' +
                     '</div>' +
-                    '<div class="msg" ></div>' +
-                    '<div class="msg" ></div>' +
-                    '<div class="msg" ></div>' +
-                    '<div class="msg" ></div>' +
-                    '<div class="msg" ></div>' +
-                    '<div class="msg" ></div>' +
-                    '<div class="msg" ></div>' +
-                    '<div class="msg" ></div>' +
                     '<div class="msg" ></div>';
 
                 $('#msgs').append(html)
@@ -265,6 +259,8 @@
                 if( status == 100) {
                     $('#fd').val(data.data.fd);
                     $('.online_users').text(data.data.online);
+                    $('#msgs').append('<div class="msg min time" id="histStart" style="font-weight: bolder;color: #ff0000">'+data.data.msg+'</div>')
+                    $('#msgs').append('<div class="msg min time" id="histStart"></div>');
                 } else if(status == -2) {
                     layer.msg('长时间未说话，正在重连服务器', {
                         icon: 16
@@ -322,23 +318,32 @@
                         msg_div += '</div>';
                         $('#msgs').append(msg_div);
 
-                        scrollToEnd();
+
                     }
                 }
+
+                scrollToEnd();
             };
 
             ws.onclose = function(event){
-                layer.alert("已经与服务器断开连接\r\n当前连接状态："+this.readyState,{
-                    'title' : "警告",
-                    btn: '重连' //按钮
-                },function () {
-                    layer.closeAll();
-                    window.location.href = '/';
-                });
+                var seconds = 5;
+                $('#msgs .reconnect').remove();
+                $('#msgs').append('<div class="msg min time reconnect" id="histStart" style="color: #008bff">已经与服务器断开连接，<span class="time_out">'+seconds+'</span>秒后客户端启动断线重连...</div>');
+
+                var index = setInterval(function () {
+                    seconds -= 1;
+                    $('.time_out').text(seconds);
+                    if(seconds <=0) {
+                        clearTimeout(index);
+                        link();
+                    }
+                },1000)
             };
 
             ws.onerror = function(event){
-                layer.alert("WebSocket异常！");
+                layer.alert("WebSocket异常！",function () {
+                    window.location.href = window.location.href
+                });
             };
         };
 
