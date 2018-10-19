@@ -25,14 +25,14 @@
     <link rel="stylesheet" href="http://chatroom.ivisionsky.com/css/layui.css" />
     <style>
         body {
-            background-image:url(https://s1.ax1x.com/2018/08/31/PvAAcq.jpg);
+            background-image:url(http://www.pptbz.com/d/file/p/201708/d772b112118b5a8f5e94eeae2cda39ba.jpg);
             background-repeat:no-repeat;
             background-attachment:fixed
         }
     </style>
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>
-    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/layer/2.3/layer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 </head>
 <body>
 <img class="abs cover body-bg" width="100%" height="100%">
@@ -418,34 +418,39 @@
         });
 
         $(document).on('click','.self_info',function () {
-            var html = '<form id="userInfo"  action="javascript:void(0)" style="margin-top: 5%">';
+            var html = '<form id="userInfo" enctype="multipart/form-data" action="javascript:void(0)" style="padding: 1%;overflow: hidden" >';
             html += '   <input  name="nick" placeholder="昵称最大15字"  class="layui-input"> <br />';
-            html += '   <input  multiple="multiple" accept="image/*" value="请选择头像" type="file" name="file" placeholder="请选择头像"  style="cursor: pointer">';
+            html += '   <input  accept="image/*" value="请选择头像" type="file" name="file" placeholder="请选择头像"  style="cursor: pointer">';
             html += '</form>';
-            layer.alert(html,{
-                'title' : "修改昵称头像",
-                btn: '修改' //按钮
-            },function () {
-                layer.msg('数据修改中。。。', {
-                    icon: 16
-                    ,shade:0.5
-                });
-                var formData = new FormData($('#userInfo')[0]);
-                $.ajax({
-                    url:"/index/index/modify",
-                    type:"post",
-                    data:formData,
-                    processData: false, // 告诉jQuery不要去处理发送的数据
-                    contentType: false, // 告诉jQuery不要去设置Content-Type请求头
-                    success:function(res){
-                        layer.closeAll();
-                        layer.msg(res.msg);
-                        $.cookie('nick', res.data.nick, { expires: 365, path: '/' });
-                        $.cookie('icon', res.data.icon, { expires: 365, path: '/' });
-                    },
-                    dataType:"json"
-                })
-            })
+
+            layer.open({
+                title : "修改昵称头像",
+                type: 1,
+                skin: 'layui-layer-demo', //样式类名
+                closeBtn: 0, //不显示关闭按钮
+                anim: 2,
+                shadeClose: true, //开启遮罩关闭
+                content: html,
+                btn: ['修改'],
+                yes : function (index, layero) {
+                    var formData = new FormData($('#userInfo')[0]);
+                    console.log(formData);
+                    $.ajax({
+                        url:"/index/index/modify",
+                        type:"post",
+                        data:formData,
+                        processData: false, // 告诉jQuery不要去处理发送的数据
+                        contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+                        success:function(res){
+                            layer.closeAll();
+                            layer.msg(res.msg);
+                            $.cookie('nick', res.data.nick, { expires: 365, path: '/' });
+                            $.cookie('icon', res.data.icon, { expires: 365, path: '/' });
+                        },
+                        dataType:"json"
+                    })
+                }
+            });
         });
 
         $(document).on('click','.other_info',function () {
