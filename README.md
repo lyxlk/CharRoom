@@ -6,7 +6,7 @@ PHP框架是：ThinkPHP5.0 (其实啥框架都行，只要你喜欢，可以随�
 
 项目演示地址 : http://chatroom.ivisionsky.com
 
-GoLang重构的项目演示地址在 : http://go.ivisionsky.com:9898
+GoLang重构的项目演示地址在 : http://go.ivisionsky.com
 
 欢迎各位同仁一起推进、做出一个有意义的项目
 
