@@ -438,14 +438,68 @@ class Swoole extends Command {
 
 
     /**
+     * @return int
+     * 获取在线人数
+     */
+    public function getOnlineUsers() {
+        $redis = new RedisPackage([],0);
+        $sessidAndFd = Model_Keys::sessidAndFd();
+        $count       = $redis->HLEN($sessidAndFd);
+
+        return  intval($count);
+    }
+
+    /**
      * @param $serv
      * @param $frame
      * 客户端连接服务器
      */
     public function pokerOpen($serv, $frame) {
-        $count = count($serv->connections);
+        $info      = $serv->getClientInfo($frame->fd);
+        $remote_ip = isset($info['remote_ip']) ? $info['remote_ip'] : "";
+        Kit::debug($remote_ip,'ips_login');
 
-        $serv->push($frame->fd,Kit::json_response(100,'ok',['icon'=>'','fd'=>$frame->fd,'online'=>$count]));
+        //IP黑名单
+        $block_ips = ['14.213.152.7' , '43.255.191.84'];
+
+        if(empty($remote_ip) || in_array($remote_ip,$block_ips)) {
+            $serv->push($frame->fd,Kit::json_response(1,'ok',[
+                'msg'  =>'你觉得我该让你登陆吗？',
+                'nick' => 'PHP研究院',
+                'icon' =>"http://pics.sc.chinaz.com/Files/pic/icons128/5938/i6.png",
+                'fd'   =>$frame->fd,
+            ]));
+            $serv->close($frame->fd);
+
+            return false;
+        }
+
+        $key   = Model_Keys::remoteIp($info['remote_ip']);
+        $redis = new RedisPackage([],$serv->worker_id);
+        if(!$redis->SETNX($key,1)) {
+            $redis->expire($key,4);
+            $serv->push($frame->fd,Kit::json_response(1,'ok',[
+                'msg'  =>'服务器消息：别瞎搞(1)',
+                'nick' => 'PHP研究院',
+                'icon' =>"http://pics.sc.chinaz.com/Files/pic/icons128/5938/i6.png",
+                'fd'   =>$frame->fd,
+            ]));
+            $serv->close($frame->fd);
+
+            return false;
+        }
+        $redis->expire($key,4);
+
+        $count = $this->getOnlineUsers() + 1;
+
+        $serv->push($frame->fd,Kit::json_response(100,'ok',[
+            'icon'   => '',
+            'fd'     => $frame->fd,
+            'online' => $count,
+            'msg'    => '系统消息：IP、设备,聊天信息均已被记录，请文明聊天<br />当前在线人数：'.$count
+            ]
+        ));
+
         foreach($serv->connections as $fd) {
             if($fd != $frame->fd) {
                 $serv->push($fd,Kit::json_response(20,'ok',[
@@ -467,14 +521,15 @@ class Swoole extends Command {
             $redis = new RedisPackage([],$serv->worker_id);
 
             if(!$redis->SETNX($key,1)) {
-                $redis->expire($key,5);
+                $redis->PSETEX($key,300,1);
                 $serv->push($frame->fd,Kit::json_response(1,'ok',[
-                    'msg'  =>'服务器消息：别瞎搞',
+                    'msg'  =>'服务器消息：别瞎搞(2)',
+                    'nick' => 'PHP研究院',
                     'icon' =>"http://pics.sc.chinaz.com/Files/pic/icons128/5938/i6.png",
                     'fd'   =>$frame->fd,
                 ]));
             } else {
-                $redis->expire($key,1);
+                $redis->PSETEX($key,300,1);
 
                 $dataStr = $frame->data;
                 $data    = json_decode($dataStr,true);
@@ -494,20 +549,18 @@ class Swoole extends Command {
                 $check = self::md5Check($data['sessid'],$data['md5']);
                 if(!$check) {
                     return $serv->push($frame->fd,Kit::json_response(1,'ok',[
-                        'msg'  =>'服务器消息：别瞎搞',
+                        'msg'  =>'服务器消息：别瞎搞(3)',
                         'icon' =>"http://pics.sc.chinaz.com/Files/pic/icons128/5938/i6.png",
                         'fd'   =>$frame->fd,
                     ]));
                 }
 
                 $data['msg'] = trim($data['msg']);
+                $data['msg'] = htmlspecialchars_decode($data['msg']);
+                $data['msg'] = preg_replace("/<(.*?)>/","",$data['msg']);
+                $data['msg'] = mb_strlen($data['msg'],'utf-8') > 100 ? mb_substr($data['msg'],0,100) : $data['msg'];
                 if($data['msg'] !== "") {
-                    $data['msg'] = htmlspecialchars_decode($data['msg']);
-                    $data['msg'] = preg_replace("/<(.*?)>/","",$data['msg']);
-
-                    $data['msg'] = mb_strlen($data['msg'],'utf-8') > 100 ? mb_substr($data['msg'],0,100) : $data['msg'];
                     $code  = isset($data['code']) ? $data['code'] : 0;
-
                     if($code == 10) {
                         //socket链接成功
                         //设置昵称头像
@@ -516,12 +569,11 @@ class Swoole extends Command {
                             return $serv->push($frame->fd,Kit::json_response(-1,'请勿禁用cookie'));
                         }
 
+                        $ukey    = Model_Keys::uinfo($sessid);
                         $userStr =  $redis->get($ukey);
                         $user    = json_decode($userStr,true);
-                        $sessidAndFd = Model_Keys::sessidAndFd();
 
                         if(empty($user)) {
-
                             $icon  = empty($data['icon']) ? self::getIconByFd($frame->fd) : "http://chatroom.ivisionsky.com/{$data['icon']}";
                             $nick  = empty($data['nick']) ? Randomname::createName() : $data['nick'];
                             $user  = [
@@ -529,10 +581,17 @@ class Swoole extends Command {
                                 'icon' => $icon,
                                 'fd'   => $frame->fd,
                             ];
-
                         } else {
-                            $user['fd'] = $frame->fd;
+                            $serv->push($frame->fd,Kit::json_response(1,'ok',[
+                                'msg'  =>'服务器消息：请勿重复登陆',
+                                'icon' =>"http://pics.sc.chinaz.com/Files/pic/icons128/5938/i6.png",
+                                'fd'   =>$frame->fd,
+                            ]));
+
+                            return $serv->close($frame->fd);
                         }
+
+                        $sessidAndFd = Model_Keys::sessidAndFd();
 
                         $redis->SETEX($ukey,600,json_encode($user));
                         $redis->hset($sessidAndFd,$frame->fd,$sessid);
@@ -582,14 +641,22 @@ class Swoole extends Command {
                         ]));
 
                     } elseif($code == 16) { //join
-                            $html = 'come with us ! <br /><img style="width: 45%;height: 45%" src="http://chatroom.ivisionsky.com/img/qun.png">';
+                        $html = 'come with us ! <br /><img style="width: 45%;height: 45%" src="http://chatroom.ivisionsky.com/img/qun.jpg">';
                         return $serv->push($frame->fd,Kit::json_response(1,'ok',[
                             'msg'  => $html,
                             'icon' =>"/img/lk.jpg",
                             'fd'   =>$frame->fd,
                         ]));
 
-                    } else {
+                    }  elseif($code == 17) { //join
+                        $html = "<a href='http://go.ivisionsky.com' target='_blank'>Golang新重构聊天室地址 ： http://go.ivisionsky.com</a>";
+                        return $serv->push($frame->fd,Kit::json_response(1,'ok',[
+                            'msg'  => $html,
+                            'icon' =>"/img/lk.jpg",
+                            'fd'   =>$frame->fd,
+                        ]));
+
+                    }  else {
                         $info = $serv->getClientInfo($frame->fd);
                         $serv->task(json_encode([
                             'msg'=> $data['msg'],
@@ -621,6 +688,13 @@ class Swoole extends Command {
                         }
 
                     }
+                } else {
+                    $redis->expire($key,5);
+                    $serv->push($frame->fd,Kit::json_response(1,'ok',[
+                        'msg'  =>'服务器消息：别瞎搞(4)',
+                        'icon' =>"http://pics.sc.chinaz.com/Files/pic/icons128/5938/i6.png",
+                        'fd'   =>$frame->fd,
+                    ]));
                 }
             }
         } catch(\Exception $e) {
@@ -640,12 +714,13 @@ class Swoole extends Command {
         $sessidAndFd = Model_Keys::sessidAndFd();
         $redis       = new RedisPackage([],$serv->worker_id);
 
-        $count = count($serv->connections) - 1;
-
+        $count   = $this->getOnlineUsers() - 1;
+        $count   = $count > 0 ? $count : 0;
         $sessid  = $redis->hget($sessidAndFd,$fd);
         $ukey    = Model_Keys::uinfo($sessid);
         $userStr = $redis->get($ukey);
         $user    = json_decode($userStr,true);
+
         if(!empty($user)) {
             foreach($serv->connections as $_fd) {
                 if($fd != $_fd) {
@@ -657,6 +732,7 @@ class Swoole extends Command {
             }
         }
         $redis->hdel($sessidAndFd,$fd);
+        $redis->del($ukey);
 
         return true;
     }
@@ -686,5 +762,22 @@ class Swoole extends Command {
      */
     public function pokerWorkerStart($serv, $worker_id) {
 
+       /* //定时检测 非正常客户端连接
+        if (!$serv->taskworker) {
+            $serv->tick(60000, function ($id) use ($serv,$worker_id){
+                $sessidAndFd = Model_Keys::sessidAndFd();
+                $redis = new RedisPackage([],$worker_id);
+                foreach($serv->connections as $fd) {
+                    $ret = $redis->hget($sessidAndFd,$fd);
+                    if($ret == "+OK") {
+                        continue;
+                    }
+
+                    if(empty($ret)) {
+                        $serv->close($fd);
+                    }
+                }
+            });
+        }*/
     }
 }
