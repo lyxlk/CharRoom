@@ -18,7 +18,7 @@ CharRoom单词写错了，有洁癖的自行修改
 
 服务器启动/关闭
 ===============
- + 一律需要将项目“charRoom”放置在 /var/www/ 下，没有就自己创建
+ + 一律需要将项目“charRoom”放置在 /var/www/ 下，没有就自己创建；注意项目名的大小写！！！
  + cd /var/www/charRoom  && php think Swoole -m "start"
  + cd /var/www/charRoom  && php think Swoole -m "stop"
  
