@@ -4,7 +4,11 @@
 
 PHP框架是：ThinkPHP5.0 (其实啥框架都行，只要你喜欢，可以随意瞎搞)
 
-项目演示地址 : http://chatroom.ivisionsky.com
+2.0.0版本已上线 https://icu.ivisionsky.com
+
+-------------旧版本分割线-----------------
+
+项目演示地址 : http://chatroom.ivisionsky.com  
 
 GoLang重构的项目演示地址在 : http://go.ivisionsky.com
 
